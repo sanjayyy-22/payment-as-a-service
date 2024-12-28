@@ -1,6 +1,5 @@
-import { LemonsqueezyModule } from './lemonsqueezy/lemonsqueezy.module';
-import { LemonsqueezyService } from './lemonsqueezy/lemonsqueezy.service';
 import { Module } from '@nestjs/common';
+import { PaypalModule } from './paypal/paypal.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -9,10 +8,11 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
-    LemonsqueezyModule,
+    PaypalModule,
   ],
-  controllers: [LemonsqueezyModule],
-  providers: [LemonsqueezyService],
-  exports: [LemonsqueezyService],
+
+  controllers: [],
+  providers: [],
+  exports: [],
 })
 export class AppModule {}
