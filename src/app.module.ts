@@ -1,6 +1,11 @@
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { LemonsqueezyModule } from './lemonsqueezy/lemonsqueezy.module';
 import { Module } from '@nestjs/common';
 import { PaypalModule } from './paypal/paypal.module';
+import { PrismaModule } from './prisma/prisma.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { UserModule } from './user/user.module';
 import { join } from 'path';
 
 @Module({
@@ -9,6 +14,11 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', 'client'),
     }),
     PaypalModule,
+    LemonsqueezyModule,
+    ConfigModule.forRoot(),
+    AuthModule,
+    UserModule,
+    PrismaModule,
   ],
 
   controllers: [],
