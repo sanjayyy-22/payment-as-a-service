@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
+import { CreateSignupDetailsDto } from './dto/create-user-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 
@@ -21,7 +22,25 @@ export class AuthService {
     };
   }
 
-  async register(email: string, password: string) {
-    return this.userService.createUser(email, password);
+  async register(details: CreateSignupDetailsDto) {
+    return this.userService.createUser(details);
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.userService.getUserByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    const token = this.jwtService.sign(
+      { email },
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '1h',
+      },
+    );
+    user.token = token;
+    const url = `http://localhost:3000/auth/reset-password?token=${token}`;
+    const text = `Click on the link to reset your password: ${url}`;
+    console.log('Sending text:', text);
   }
 }

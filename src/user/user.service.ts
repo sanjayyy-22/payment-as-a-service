@@ -1,18 +1,33 @@
 import * as bcrypt from 'bcrypt';
 
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+
+import { CreateSignupDetailsDto } from '../auth/dto/create-user-auth.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(email: string, password: string) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async createUser(details: CreateSignupDetailsDto) {
+    const hashedPassword = await bcrypt.hash(details.password, 10);
+    const email = await this.getUserByEmail(details.email);
+    if (email) {
+      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
+    }
     return this.prisma.user.create({
       data: {
-        email: email,
+        name: details.name,
+        email: details.email,
         password: hashedPassword,
+        city: details.city,
+        region: details.region,
+        companyName: details.companyName,
+        businessType: details.businessType,
+        registrationNumber: details.registrationNumber,
+        accountNumber: details.accountNumber,
+        routingNumber: details.routingNumber,
+        taxId: details.taxId,
       },
     });
   }

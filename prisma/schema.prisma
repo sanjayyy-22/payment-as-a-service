@@ -30,6 +30,13 @@ model User{
   name String?
   city String?
   region String?
+  companyName String?
+  businessType String?
+  token String?
+  registrationNumber String?
+  accountNumber String?
+  routingNumber String?
+  taxId String?
   password String
   role Role @default(CUSTOMER)
   createdAt DateTime @default(now())
